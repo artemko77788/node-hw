@@ -18,7 +18,7 @@ router.put('/:contactId', validation(joiSchema), ctrl.updateContacts)
 router.patch(
   '/:contactId/favorite',
   validation(favoriteJoiSchema),
-  ctrl.updateFavoriteContact,
+  ctrl.updateStatusContact,
 )
 
 module.exports = router

@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const { Contact } = require('../../models')
 
-const updateFavoriteContact = asyncHandler(async (req, res, next) => {
+const updateStatusContact = asyncHandler(async (req, res, next) => {
   const { contactId } = req.params
   const { favorite } = req.body
 
@@ -22,4 +22,4 @@ const updateFavoriteContact = asyncHandler(async (req, res, next) => {
   })
 })
 
-module.exports = updateFavoriteContact
+module.exports = updateStatusContact
