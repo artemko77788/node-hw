@@ -1,27 +1,31 @@
 const { Schema, model } = require('mongoose')
 const Joi = require('joi')
+
 const userSchema = Schema(
   {
-    name: {
+    password: {
       type: String,
-      require: true,
+      required: [true, 'Password is required'],
     },
     email: {
       type: String,
-      require: true,
+      required: [true, 'Email is required'],
       unique: true,
     },
-    password: {
+    subscription: {
       type: String,
-      require: true,
-      minlength: 6,
+      enum: ['starter', 'pro', 'business'],
+      default: 'starter',
+    },
+    token: {
+      type: String,
+      default: null,
     },
   },
   { versionKey: false, timestamps: true },
 )
 const joiRegisterSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 })
 
