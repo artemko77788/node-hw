@@ -20,7 +20,7 @@ const signup = asyncHandler(async (req, res) => {
       code: 201,
 
       RequestBody: {
-        email,
+        email: result.email,
       },
     })
   } catch (error) {
