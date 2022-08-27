@@ -1,13 +1,18 @@
 const asyncHandler = require('express-async-handler')
-const { Contact } = require('../../models')
+const createErrors = require('http-errors')
+
+const { contactsService } = require('../../services')
 
 const postContact = asyncHandler(async (req, res, next) => {
-  const { _id } = req.user
-  const result = await Contact.create({ ...req.body, owner: _id })
+  const { id } = req.user
+  const body = req.body
+  const contact = await contactsService.postContact(body, id)
+  if (!contact) throw createErrors(400, 'Bad Request')
+
   res.status(201).json({
     status: 'success',
     code: 201,
-    data: { result },
+    data: { contact },
   })
 })
 

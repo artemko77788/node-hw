@@ -1,10 +1,10 @@
 const asyncHandler = require('express-async-handler')
-const { Contact } = require('../../models')
-const createErrors = require('http-errors')
 
+const createErrors = require('http-errors')
+const { contactsService } = require('../../services')
 const deleteContact = asyncHandler(async (req, res, next) => {
   const { contactId } = req.params
-  const result = await Contact.findByIdAndRemove(contactId)
+  const result = await contactsService.deleteContact(contactId)
 
   if (!result) {
     throw createErrors(404, 'Not found')

@@ -1,12 +1,9 @@
 const asyncHandler = require('express-async-handler')
-const { Contact } = require('../../models')
+const { contactsService } = require('../../services')
 
 const getAll = asyncHandler(async (req, res, next) => {
   const { _id } = req.user
-  const contacts = await Contact.find({ owner: _id }).populate(
-    'owner',
-    '_id email',
-  )
+  const contacts = await contactsService.getAllContacts(_id)
 
   res.json({
     status: 'success',
