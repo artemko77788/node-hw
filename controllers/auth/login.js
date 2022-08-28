@@ -1,14 +1,15 @@
-const { User } = require('../../models')
 const asyncHandler = require('express-async-handler')
 const { Unauthorized } = require('http-errors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const getUserByEmail = require('../../services/authService/getUserByEmail')
+const loginService = require('../../services/authService/loginService')
 const { SECRET_KEY } = process.env
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
-  const user = await User.findOne({ email })
+  const user = await getUserByEmail(email)
 
   if (!user) {
     throw new Unauthorized('Email or password is wrong')
@@ -23,7 +24,7 @@ const login = asyncHandler(async (req, res) => {
   }
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' })
-  await User.findByIdAndUpdate(user._id, { token })
+  await loginService(user._id, token)
   res.json({
     status: 'success',
     code: 200,

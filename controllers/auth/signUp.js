@@ -1,12 +1,15 @@
 const asyncHandler = require('express-async-handler')
-const { User } = require('../../models')
+
 const bcrypt = require('bcrypt')
 const createErrors = require('http-errors')
+const getUserByEmail = require('../../services/authService/getUserByEmail')
+const signupService = require('../../services/authService/signupService')
 
 const signup = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
-  const user = await User.findOne({ email })
+  const user = await getUserByEmail(email)
+
   if (user) {
     throw createErrors(409, `User with ${email} already exist`)
   }
@@ -14,7 +17,8 @@ const signup = asyncHandler(async (req, res) => {
   try {
     const hashPassord = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
-    const result = await User.create({ email, password: hashPassord })
+    const result = await signupService(email, hashPassord)
+
     res.status(201).json({
       status: 'success',
       code: 201,

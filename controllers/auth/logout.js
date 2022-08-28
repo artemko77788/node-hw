@@ -1,9 +1,10 @@
-const { User } = require('../../models')
 const asyncHandler = require('express-async-handler')
+const { loginService } = require('../../services/authService')
+
 const logout = asyncHandler(async (req, res) => {
   const { _id } = req.user
 
-  await User.findByIdAndUpdate(_id, { token: null })
+  await loginService(_id, null)
   res.status(204).json()
 })
 
