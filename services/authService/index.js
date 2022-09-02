@@ -1,10 +1,9 @@
-const loginService = require('./loginService')
-
+const updateById = require('./updateById')
 const signupService = require('./signupService')
 const getUserByEmail = require('./getUserByEmail')
 
 module.exports = {
-  loginService,
+  updateById,
   signupService,
   getUserByEmail,
 }

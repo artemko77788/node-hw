@@ -3,7 +3,7 @@ const { Unauthorized } = require('http-errors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const getUserByEmail = require('../../services/authService/getUserByEmail')
-const loginService = require('../../services/authService/loginService')
+const updateById = require('../../services/authService/updateById')
 const { SECRET_KEY } = process.env
 
 const login = asyncHandler(async (req, res) => {
@@ -24,7 +24,7 @@ const login = asyncHandler(async (req, res) => {
   }
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' })
-  await loginService(user._id, token)
+  await updateById(user._id, token)
   res.json({
     status: 'success',
     code: 200,
