@@ -1,3 +1,5 @@
 const photoResize = require('./photoResize')
+const sendMail = require('./sendEmail')
+const ctrlWrapper = require('./ctrlWrapper')
 
-module.exports = { photoResize }
+module.exports = { photoResize, sendMail, ctrlWrapper }

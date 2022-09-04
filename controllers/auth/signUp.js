@@ -7,6 +7,11 @@ const signupService = require('../../services/authService/signupService')
 
 const gravatar = require('gravatar')
 
+const { sendEmail } = require('../../helpers')
+
+const { nanoid } = require('nanoid')
+const verificationToken = nanoid()
+
 const signup = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   const user = await getUserByEmail(email)
@@ -18,7 +23,20 @@ const signup = asyncHandler(async (req, res) => {
   try {
     const hashPassord = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
     const avatarURL = gravatar.url(email)
-    const result = await signupService(email, hashPassord, avatarURL)
+    const mail = {
+      to: email,
+      subject: 'confirmation email',
+      html: `<a target = "_blank"  href='http://localhost:3000/api /users/verify/${verificationToken}'>Click to verify</a>`,
+    }
+
+    await sendEmail(mail)
+
+    const result = await signupService(
+      email,
+      hashPassord,
+      avatarURL,
+      verificationToken,
+    )
 
     res.status(201).json({
       status: 'success',
@@ -27,6 +45,7 @@ const signup = asyncHandler(async (req, res) => {
       RequestBody: {
         email: result.email,
         avatarURL: result.avatarURL,
+        verificationToken: result.verificationToken,
       },
     })
   } catch (error) {
