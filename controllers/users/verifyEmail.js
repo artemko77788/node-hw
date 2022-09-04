@@ -1,10 +1,9 @@
 const { NotFound } = require('http-errors')
 const updateContact = require('../../services/contactsService/updateContact')
-const { findVerifyEmail } = require('../../services/authService')
-
+const { authService } = require('../../services')
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params
-  const user = await findVerifyEmail(verificationToken)
+  const user = await authService.findVerifyEmail(verificationToken)
 
   if (!user) {
     throw NotFound()

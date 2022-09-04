@@ -7,14 +7,10 @@ const signupService = require('../../services/authService/signupService')
 
 const gravatar = require('gravatar')
 const { v4 } = require('uuid')
-const { sendEmail } = require('../../helpers')
-
-const verificationToken = v4()
+const sendEmail = require('../../helpers/sendEmail')
 
 const signup = asyncHandler(async (req, res) => {
   const { email, password } = req.body
-
-  console.log()
 
   const user = await getUserByEmail(email)
 
@@ -24,14 +20,12 @@ const signup = asyncHandler(async (req, res) => {
 
   try {
     const hashPassord = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-    const avatarURL = gravatar.url(email)
-    const mail = {
-      to: email,
-      subject: 'confirmation email',
-      html: `<a target = "_blank"  href='http://localhost:3000/api /users/verify/${verificationToken}'>Click to verify</a>`,
-    }
 
-    await sendEmail(mail)
+    const avatarURL = gravatar.url(email)
+
+    const verificationToken = v4()
+
+    await sendEmail(email, verificationToken)
 
     const result = await signupService(
       email,
