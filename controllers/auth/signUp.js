@@ -6,14 +6,16 @@ const getUserByEmail = require('../../services/authService/getUserByEmail')
 const signupService = require('../../services/authService/signupService')
 
 const gravatar = require('gravatar')
-
+const { v4 } = require('uuid')
 const { sendEmail } = require('../../helpers')
 
-const { nanoid } = require('nanoid')
-const verificationToken = nanoid()
+const verificationToken = v4()
 
 const signup = asyncHandler(async (req, res) => {
   const { email, password } = req.body
+
+  console.log()
+
   const user = await getUserByEmail(email)
 
   if (user) {
