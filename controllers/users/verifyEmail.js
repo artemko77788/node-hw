@@ -1,5 +1,5 @@
 const { NotFound } = require('http-errors')
-const updateContact = require('../../services/contactsService/updateContact')
+
 const { authService } = require('../../services')
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params
@@ -8,10 +8,13 @@ const verifyEmail = async (req, res) => {
   if (!user) {
     throw NotFound()
   }
-  await updateContact(user._id, { verify: true, verificationToken: null })
+  await authService.updateById(user._id, {
+    verify: true,
+    verificationToken: null,
+  })
 
-  res.json({
-    message: 'Verify success',
+  res.status(200).json({
+    message: 'Verification successful',
   })
 }
 module.exports = verifyEmail
